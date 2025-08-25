@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
                   return Center(child: Text(newsController.errorMessage.value));
                 }
                 if (newsController.articles.isEmpty) {
-                  return Center(child: Text('Tidak ada berita tersedia'));
+                  return Center(child: Text('No articles found.'));
                 }
                 return RefreshIndicator(
                   onRefresh: () async => newsController.refreshNews(),

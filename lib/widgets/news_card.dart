@@ -80,15 +80,16 @@ class NewsCard extends StatelessWidget {
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   color: Colors.black54,
+                                  backgroundBlendMode: BlendMode.darken,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Icon(
                                   controller.isFavorite(article)
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
+                                      ? Icons.bookmark_added
+                                      : Icons.bookmark,
                                   color: controller.isFavorite(article)
-                                      ? Colors.red
-                                      : Colors.white,
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).colorScheme.onPrimary,
                                   size: 20,
                                 ),
                               ),
@@ -177,13 +178,13 @@ class NewsCard extends StatelessWidget {
       Duration difference = now.difference(date);
 
       if (difference.inDays > 0) {
-        return '${difference.inDays} hari lalu';
+        return '${difference.inDays} days ago';
       } else if (difference.inHours > 0) {
-        return '${difference.inHours} jam lalu';
+        return '${difference.inHours} hours ago';
       } else if (difference.inMinutes > 0) {
-        return '${difference.inMinutes} menit lalu';
+        return '${difference.inMinutes} minutes ago';
       } else {
-        return 'Baru saja';
+        return 'Just now';
       }
     } catch (e) {
       return dateString;

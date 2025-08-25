@@ -28,7 +28,7 @@ class CategoryChips extends StatelessWidget {
                   children: [
                     Icon(
                       category.icon,
-                      size: 16,
+                      size: 20,
                       color: isSelected ? Theme.of(context).colorScheme.onPrimary : Colors.grey[600],
                     ),
                     SizedBox(width: 4),
