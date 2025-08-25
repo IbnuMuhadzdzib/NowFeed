@@ -103,15 +103,23 @@ class _DiscoverPageState extends State<DiscoverPage> {
             },
           ),
           actions: [
+             IconButton(
+              onPressed: (){
+                search(_searchController.text);
+              }, 
+              icon: Icon(Icons.search),
+              ),
+              
             IconButton(
               icon: Icon(Icons.clear),
               onPressed: () {
+                clearSearch();
                 setState(() {
                   searchQuery = "";
                   displayedItems = allItems; // reset list
                 });
               },
-            ),
+            )
           ],
         ),
       body: ListView.builder(
@@ -126,13 +134,13 @@ class _DiscoverPageState extends State<DiscoverPage> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: InkWell(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(10),
               onTap: () => openDetail(item),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                     child: Image.network(
                       item.image,
                       height: 180,
