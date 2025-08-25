@@ -9,52 +9,41 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Berita Favorit'),
-        backgroundColor: Colors.transparent,
-        actions: [
-          Obx(
-            () => controller.favoriteArticles.isNotEmpty
-                ? IconButton(
-                    icon: Icon(Icons.clear_all),
-                    onPressed: () => _showClearAllDialog(),
-                  )
-                : Container(),
-          ),
-        ],
-      ),
       body: Obx(() {
-        if (controller.favoriteArticles.isEmpty) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.favorite_border, size: 64, color: Colors.grey),
-                SizedBox(height: 16),
-                Text(
-                  'Belum ada berita favorit',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+        return Padding(
+          padding: const EdgeInsets.only(top: 30.0, bottom: 30.0, left: 10.0, right: 10.0), // ✅ padding ke seluruh body
+          child: controller.favoriteArticles.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.bookmark, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text(
+                        'No favorites yet',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'Add articles to your favorites to see them here.',
+                        style: TextStyle(
+                            fontSize: 14, color: Colors.grey[600]),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.zero, // ✅ biar gak dobel padding
+                  itemCount: controller.favoriteArticles.length,
+                  itemBuilder: (context, index) {
+                    return NewsCard(
+                      article: controller.favoriteArticles[index],
+                      showFavoriteButton: true,
+                    );
+                  },
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Tambahkan berita ke favorit dengan menekan ikon hati',
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-          );
-        }
-
-        return ListView.builder(
-          padding: EdgeInsets.all(8),
-          itemCount: controller.favoriteArticles.length,
-          itemBuilder: (context, index) {
-            return NewsCard(
-              article: controller.favoriteArticles[index],
-              showFavoriteButton: true,
-            );
-          },
         );
       }),
     );
@@ -63,10 +52,8 @@ class FavoritesPage extends StatelessWidget {
   void _showClearAllDialog() {
     Get.dialog(
       AlertDialog(
-        title: Text('Hapus Semua Favorit'),
-        content: Text(
-          'Apakah Anda yakin ingin menghapus semua berita favorit?',
-        ),
+        title: Text('Delete All Favorites'),
+        content: Text('Are you sure you want to delete all favorite articles?'),
         actions: [
           TextButton(onPressed: () => Get.back(), child: Text('Batal')),
           TextButton(

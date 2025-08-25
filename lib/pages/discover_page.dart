@@ -4,7 +4,11 @@ import '../models/discover_item.dart';
 class DiscoverPage extends StatefulWidget {
   @override
   _DiscoverPageState createState() => _DiscoverPageState();
+  
 }
+
+  final TextEditingController _searchController = TextEditingController();
+
 
 class _DiscoverPageState extends State<DiscoverPage> {
   List<DiscoverItem> allItems = [
@@ -69,33 +73,47 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
+   void clearSearch() {
+    setState(() {
+      _searchController.clear(); // 🔑 kosongin textfield
+      searchQuery = "";
+      displayedItems = allItems;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        centerTitle: true,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 30.0, bottom: 12.0, right: 30.0, top: 12.0),
-            child: TextField(
-              onChanged: search,
-              decoration: InputDecoration(
-                hintText: "Search Discover...",
-                prefixIcon: Icon(Icons.search),
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
-              ),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
+          title: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              hintText: 'Search Discover...',
+              border: InputBorder.none,
+              hintStyle: TextStyle(color: Colors.white70),
             ),
+            style: TextStyle(color: Colors.white),
+            onChanged: (value) {
+              search(value); // realtime filter
+            },
+            onSubmitted: (value) {
+              search(value); // filter saat tekan enter
+            },
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                setState(() {
+                  searchQuery = "";
+                  displayedItems = allItems; // reset list
+                });
+              },
+            ),
+          ],
         ),
-      ),
       body: ListView.builder(
         padding: EdgeInsets.all(16),
         itemCount: displayedItems.length,
