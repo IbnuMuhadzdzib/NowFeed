@@ -39,7 +39,7 @@ class _MainLayoutState extends State<MainLayout> {
      floatingActionButton: Obx(() {
           bool isHome = newsController.selectedIndex.value == 0;
           return Transform.translate(
-            offset: Offset(10, 0), // 🔽 turunin 10px
+            offset: Offset(5, 0), // 🔽 turunin 10px
             child: FloatingActionButton(
               backgroundColor: Colors.red,
               onPressed: () {
@@ -165,13 +165,13 @@ class _MainLayoutState extends State<MainLayout> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                Icons.person,
+                Icons.notifications,
                 color: newsController.selectedIndex.value == 4
                     ? Theme.of(context).colorScheme.primary
                     : const Color.fromARGB(255, 71, 70, 70),
               ),
               Text(
-                "Profile",
+                "Reminder",
                 style: TextStyle(
                   fontSize: 12,
                   color: newsController.selectedIndex.value == 4
