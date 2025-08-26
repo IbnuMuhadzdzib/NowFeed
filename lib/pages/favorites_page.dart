@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/news_controller.dart';
+import 'package:flutter_application_7/controllers/news_controller.dart';
 import '../widgets/news_card.dart';
 
 class FavoritesPage extends StatelessWidget {

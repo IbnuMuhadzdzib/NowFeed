@@ -14,83 +14,76 @@ class NewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+      elevation: 6, // ✨ shadow lebih modern
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18),
+      ),
       child: InkWell(
         onTap: () => Get.to(() => DetailPage(article: article)),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(18),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image with hero animation
+            // ====================== GAMBAR ======================
             if (article.urlToImage.isNotEmpty)
               Hero(
                 tag: article.url,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+                    topLeft: Radius.circular(18),
+                    topRight: Radius.circular(18),
                   ),
                   child: Stack(
                     children: [
                       Image.network(
                         article.urlToImage,
-                        height: 200,
+                        height: 220,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 200,
-                            color: Colors.grey[300],
-                            child: Center(
-                              child: Icon(
-                                Icons.image_not_supported,
-                                size: 48,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            height: 200,
-                            color: Colors.grey[300],
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                value:
-                                    loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
                       ),
+
+                      // ✨ Overlay gradient agar teks/fav lebih jelas
+                      Container(
+                        height: 220,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.black.withOpacity(0.3), Colors.transparent],
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                          ),
+                        ),
+                      ),
+
+                      // ====================== FAVORITE BUTTON ======================
                       if (showFavoriteButton)
                         Positioned(
-                          top: 8,
-                          right: 8,
+                          top: 10,
+                          right: 10,
                           child: Obx(
                             () => GestureDetector(
                               onTap: () => controller.toggleFavorite(article),
                               child: Container(
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: Colors.black54,
-                                  backgroundBlendMode: BlendMode.darken,
-                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white.withOpacity(0.9),
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black26,
+                                      blurRadius: 6,
+                                      offset: Offset(0, 3),
+                                    ),
+                                  ],
                                 ),
                                 child: Icon(
                                   controller.isFavorite(article)
-                                      ? Icons.bookmark_added
-                                      : Icons.bookmark,
+                                      ? Icons.bookmark_rounded
+                                      : Icons.bookmark_border_rounded,
                                   color: controller.isFavorite(article)
                                       ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context).colorScheme.onPrimary,
-                                  size: 20,
+                                      : Colors.grey[700],
+                                  size: 22,
                                 ),
                               ),
                             ),
@@ -101,64 +94,61 @@ class NewsCard extends StatelessWidget {
                 ),
               ),
 
-            // Content
+            // ====================== CONTENT ======================
             Padding(
               padding: EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Title
+                  // ====================== TITLE ======================
                   Text(
                     article.title,
                     style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
                       height: 1.3,
+                      color: Colors.black87,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 8),
 
-                  // Description
+                  // ====================== DESCRIPTION ======================
                   Text(
                     article.description,
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[600],
-                      height: 1.4,
+                      color: Colors.black.withOpacity(0.7),
+                      height: 1.5,
                     ),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 14),
 
-                  // Meta information
+                  // ====================== META INFO (Source + Time) ======================
                   Row(
                     children: [
-                      Icon(Icons.source, size: 14, color: Colors.grey[500]),
+                      Icon(Icons.public, size: 14, color: Colors.grey[600]),
                       SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           article.source,
                           style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[500],
+                            fontSize: 13,
+                            color: Colors.grey[600],
                             fontWeight: FontWeight.w500,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      SizedBox(width: 8),
-                      Icon(
-                        Icons.access_time,
-                        size: 14,
-                        color: Colors.grey[500],
-                      ),
+                      SizedBox(width: 12),
+                      Icon(Icons.access_time, size: 14, color: Colors.grey[600]),
                       SizedBox(width: 4),
                       Text(
-                        _formatDate(article.publishedAt),
-                        style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                        _formatDate(article.publishedAt), // ✨ WAKTU
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -178,11 +168,11 @@ class NewsCard extends StatelessWidget {
       Duration difference = now.difference(date);
 
       if (difference.inDays > 0) {
-        return '${difference.inDays} days ago';
+        return '${difference.inDays}d ago';
       } else if (difference.inHours > 0) {
-        return '${difference.inHours} hours ago';
+        return '${difference.inHours}h ago';
       } else if (difference.inMinutes > 0) {
-        return '${difference.inMinutes} minutes ago';
+        return '${difference.inMinutes}m ago';
       } else {
         return 'Just now';
       }

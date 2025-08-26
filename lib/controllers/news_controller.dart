@@ -145,18 +145,18 @@ class NewsController extends GetxController {
     if (isFavorite(article)) {
       favoriteArticles.removeWhere((item) => item.url == article.url);
       Get.snackbar(
-        'Favorit',
-        'Dihapus dari favorit',
+        'Favorite',
+        'Removed from favorites',
         snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 1),
       );
     } else {
       favoriteArticles.add(article);
       Get.snackbar(
-        'Favorit',
-        'Ditambahkan ke favorit',
+        'Favorite',
+        'Added to favorites',
         snackPosition: SnackPosition.BOTTOM,
-        duration: Duration(seconds: 2),
+        duration: Duration(seconds: 1),
       );
     }
   }
