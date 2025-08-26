@@ -19,7 +19,7 @@ class _MainLayoutState extends State<MainLayout> {
     DiscoverPage(),
     FavoritesPage(),
     SearchPage(),
-    ProfilePage(),
+    NotificationPage(),
   ];
 
   final NewsController newsController = Get.put(NewsController());

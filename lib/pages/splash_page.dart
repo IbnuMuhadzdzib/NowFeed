@@ -51,7 +51,7 @@ class _SplashPageState extends State<SplashPage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                './assets/icon/icon-rework.png',
+                'assets/icon/final-splash-logo.png',
                 width: 100,
                 height: 100,
               ),

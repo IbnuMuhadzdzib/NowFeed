@@ -53,10 +53,10 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/final-logo.png"
+  image_path: "assets/icon/final-launcher-logo.png"
 
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/icon/final-logo.png"
+  adaptive_icon_foreground: "assets/icon/final-launcher-logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -66,6 +66,8 @@ flutter:
   assets:
     -  assets/icon/icon-rework.png
     -  assets/icon/final-logo.png
+    -  assets/icon/final-splash-logo.png
+    -  assets/icon/final-launcher-logo.png
 
   fonts:
     -  family: Tommy
