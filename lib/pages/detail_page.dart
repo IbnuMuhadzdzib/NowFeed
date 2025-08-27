@@ -14,58 +14,58 @@ class DetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(  context).colorScheme.primary,
+        elevation: 0.5,
+        iconTheme: IconThemeData(color: Colors.black87),
         actions: [
           Obx(
             () => IconButton(
               icon: Icon(
                 controller.isFavorite(article)
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                color: controller.isFavorite(article) ? Colors.red : null,
+                    ? Icons.bookmark
+                    : Icons.bookmark_border,
+                color: controller.isFavorite(article) ? Theme.of(context).colorScheme.onPrimary : Colors.black87,
               ),
               onPressed: () => controller.toggleFavorite(article),
             ),
           ),
-          IconButton(icon: Icon(Icons.share), onPressed: () => _shareArticle()),
+          IconButton(
+            icon: Icon(Icons.share, color: Colors.black87),
+            onPressed: () => _shareArticle(),
+          ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
+            // Header Image
             if (article.urlToImage.isNotEmpty)
               Hero(
                 tag: article.url,
                 child: Container(
                   width: double.infinity,
-                  height: 250,
+                  height: 240,
                   child: Image.network(
                     article.urlToImage,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        color: Colors.grey[300],
+                        color: Colors.grey[200],
                         child: Center(
-                          child: Icon(
-                            Icons.image_not_supported,
-                            size: 64,
-                            color: Colors.grey[600],
-                          ),
+                          child: Icon(Icons.image_not_supported,
+                              size: 64, color: Colors.grey[600]),
                         ),
                       );
                     },
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) return child;
-                      return Container(
-                        color: Colors.grey[300],
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
+                    loadingBuilder: (context, child, progress) {
+                      if (progress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: progress.expectedTotalBytes != null
+                              ? progress.cumulativeBytesLoaded /
+                                  progress.expectedTotalBytes!
+                              : null,
                         ),
                       );
                     },
@@ -73,8 +73,9 @@ class DetailPage extends StatelessWidget {
                 ),
               ),
 
+            // Content
             Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(18),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -89,7 +90,7 @@ class DetailPage extends StatelessWidget {
                   ),
                   SizedBox(height: 12),
 
-                  // Meta info
+                  // Meta Info
                   Row(
                     children: [
                       Icon(Icons.source, size: 16, color: Colors.grey[600]),
@@ -97,10 +98,7 @@ class DetailPage extends StatelessWidget {
                       Expanded(
                         child: Text(
                           article.source,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[600],
-                          ),
+                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                         ),
                       ),
                       Text(
@@ -109,50 +107,45 @@ class DetailPage extends StatelessWidget {
                       ),
                     ],
                   ),
-
                   if (article.author.isNotEmpty &&
                       article.author != 'Unknown Author')
                     Padding(
-                      padding: EdgeInsets.only(top: 8),
+                      padding: EdgeInsets.only(top: 6),
                       child: Row(
                         children: [
-                          Icon(Icons.person, size: 16, color: Colors.grey[600]),
+                          Icon(Icons.person,
+                              size: 16, color: Colors.grey[600]),
                           SizedBox(width: 4),
                           Text(
-                            'Oleh: ${article.author}',
+                            'By ${article.author}',
                             style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
+                                fontSize: 14, color: Colors.grey[600]),
                           ),
                         ],
                       ),
                     ),
 
-                  SizedBox(height: 16),
+                  SizedBox(height: 18),
                   Divider(),
-                  SizedBox(height: 16),
+                  SizedBox(height: 18),
 
                   // Description
                   Text(
                     article.description,
                     style: TextStyle(fontSize: 16, height: 1.6),
                   ),
-
                   SizedBox(height: 16),
 
-                  // Content (if available)
+                  // Content (if exists and different)
                   if (article.content.isNotEmpty &&
                       article.content != article.description)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Konten:',
+                          'Full Content:',
                           style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
+                              fontSize: 18, fontWeight: FontWeight.w600),
                         ),
                         SizedBox(height: 8),
                         Text(
@@ -163,15 +156,19 @@ class DetailPage extends StatelessWidget {
                       ],
                     ),
 
-                  // Read more button
+                  // Read More button
                   Container(
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () => _launchURL(article.url),
                       icon: Icon(Icons.open_in_browser),
-                      label: Text('Baca Selengkapnya'),
+                      label: Text('Read Full Article'),
                       style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                        textStyle: TextStyle(fontSize: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
                   ),
@@ -188,18 +185,8 @@ class DetailPage extends StatelessWidget {
     try {
       DateTime date = DateTime.parse(dateString);
       List<String> months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'Mei',
-        'Jun',
-        'Jul',
-        'Agu',
-        'Sep',
-        'Okt',
-        'Nov',
-        'Des',
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
       ];
       return '${date.day} ${months[date.month - 1]} ${date.year}';
     } catch (e) {
@@ -215,7 +202,7 @@ class DetailPage extends StatelessWidget {
       } else {
         Get.snackbar(
           'Error',
-          'Tidak dapat membuka link',
+          'Unable to open the link',
           snackPosition: SnackPosition.BOTTOM,
         );
       }
@@ -223,10 +210,10 @@ class DetailPage extends StatelessWidget {
   }
 
   void _shareArticle() {
-    // In a real app, you would use share_plus package
+    // Ideally use share_plus package
     Get.snackbar(
-      'Berbagi',
-      'Fitur berbagi akan segera tersedia',
+      'Share',
+      'Sharing feature will be available soon',
       snackPosition: SnackPosition.BOTTOM,
     );
   }

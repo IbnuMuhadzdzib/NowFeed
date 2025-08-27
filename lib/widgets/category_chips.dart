@@ -7,52 +7,70 @@ class CategoryChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: 70,
       child: Obx(
-        () => ListView.builder(
+        () => ListView.separated(
           scrollDirection: Axis.horizontal,
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          separatorBuilder: (_, __) => const SizedBox(width: 10),
           itemCount: controller.categories.length,
           itemBuilder: (context, index) {
             final category = controller.categories[index];
             final isSelected =
                 controller.selectedCategory.value == category.name;
 
-            return Padding(
-              padding: EdgeInsets.only(right: 8),
-              child: FilterChip(
-                selected: isSelected,
-                label: Row(
+            return GestureDetector(
+              onTap: () => controller.fetchNewsByCategory(category.name),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    if (isSelected)
+                      BoxShadow(
+                        color: theme.colorScheme.primary.withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                  ],
+                  border: Border.all(
+                    color: isSelected
+                        ? theme.colorScheme.primary
+                        : Colors.grey.shade300,
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       category.icon,
                       size: 20,
-                      color: isSelected ? Theme.of(context).colorScheme.onPrimary : Colors.grey[600],
+                      color: isSelected
+                          ? theme.colorScheme.onPrimary
+                          : Colors.grey[700],
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 6),
                     Text(
                       category.displayName,
                       style: TextStyle(
-                        color: isSelected ? Theme.of(context).colorScheme.onPrimary : Colors.grey[600],
-                        fontWeight: isSelected
-                            ? FontWeight.w600
-                            : FontWeight.normal,
+                        fontSize: 15,
+                        fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                        color: isSelected
+                            ? theme.colorScheme.onPrimary
+                            : Colors.grey[700],
                       ),
                     ),
                   ],
                 ),
-                onSelected: (selected) {
-                  if (selected) {
-                    controller.fetchNewsByCategory(category.name);
-                  }
-                },
-                backgroundColor: Colors.grey[200],
-                selectedColor: Theme.of(context).colorScheme.primary,
-                checkmarkColor: Theme.of(context).colorScheme.onPrimary,
-                elevation: isSelected ? 3 : 1,
-                pressElevation: 2,
               ),
             );
           },
