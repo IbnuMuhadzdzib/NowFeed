@@ -76,7 +76,7 @@ if (hotNews.isNotEmpty)
       options: CarouselOptions(
         autoPlay: true,
         enlargeCenterPage: true,
-        viewportFraction: 0.70,
+        viewportFraction: 0.85,
         aspectRatio: 16 / 9,
       ),
       itemBuilder: (context, index, realIndex) {
